@@ -5,9 +5,9 @@ type IssueListItem = IssueList[number];
 export interface Issue {
   issueNumber: IssueListItem['number'];
   title: IssueListItem['title'];
-  userName: string; // FIXME user 타입 활용하는 방법
+  userName: Exclude<IssueListItem['user'], null>['login'] | null;
   createdAt: IssueListItem['created_at'];
   comments: IssueListItem['comments'];
-  avatarUrl: string; // FIXME user 타입 활용하는 방법
+  avatarUrl: Exclude<IssueListItem['user'], null>['avatar_url'] | null;
   body: IssueListItem['body'];
 }
