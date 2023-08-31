@@ -9,14 +9,17 @@ import { Issue } from '@/types/issue';
 
 const DetailPage = () => {
   const [issues, setIssues] = useState<Issue>();
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   useEffect(() => {
     const fetchIssueDetail = async () => {
       try {
         if (id) {
+          setIsLoading(true);
           const response = await getIssueDetail(id);
           const filterdIssue = getFilteredIssue(response);
           setIssues(filterdIssue);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error('Error fetching issue:', error);
@@ -28,7 +31,7 @@ const DetailPage = () => {
 
   return (
     <>
-      {issues ? (
+      {!isLoading && issues ? (
         <>
           <Layout>
             <ProfileImg src={issues.avatarUrl} alt="avatar" />
@@ -37,7 +40,8 @@ const DetailPage = () => {
           <MarkdownViewer content={issues.body}></MarkdownViewer>
         </>
       ) : (
-        <></>
+        // 로딩 이미지 추가예정
+        <>로딩중</>
       )}
     </>
   );
