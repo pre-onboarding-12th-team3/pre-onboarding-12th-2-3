@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import { default as styled } from 'styled-components';
 
-import { IssueDetail, getIssueDetail } from '@/apis';
+import { getIssueDetail } from '@/apis';
 import { MarkdownViewer } from '@/components/common';
 import { IssueInfo } from '@/components/domain/issue';
 import { Issue } from '@/types/issue';
+import { parseIssue } from '@/utils';
 
 const DetailPage = () => {
-  const [issues, setIssues] = useState<Issue>();
+  const [issue, setIssue] = useState<Issue>();
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   useEffect(() => {
@@ -17,8 +18,8 @@ const DetailPage = () => {
         if (id) {
           setIsLoading(true);
           const response = await getIssueDetail(id);
-          const filterdIssue = getFilteredIssue(response);
-          setIssues(filterdIssue);
+          const parsedIssue = parseIssue(response);
+          setIssue(parsedIssue);
           setIsLoading(false);
         }
       } catch (error) {
@@ -31,13 +32,13 @@ const DetailPage = () => {
 
   return (
     <>
-      {!isLoading && issues ? (
+      {!isLoading && issue ? (
         <>
           <Layout>
-            <ProfileImg src={issues.avatarUrl} alt="avatar" />
-            <IssueInfo issue={issues}></IssueInfo>
+            <ProfileImg src={issue.avatarUrl ?? ''} alt="avatar" />
+            <IssueInfo issue={issue}></IssueInfo>
           </Layout>
-          <MarkdownViewer content={issues.body}></MarkdownViewer>
+          <MarkdownViewer content={issue.body ?? ''}></MarkdownViewer>
         </>
       ) : (
         // 로딩 이미지 추가예정
@@ -46,15 +47,6 @@ const DetailPage = () => {
     </>
   );
 };
-const getFilteredIssue = (issue: IssueDetail): Issue => ({
-  issueNumber: issue.number,
-  userName: issue.user ? issue.user.login : '알 수 없음',
-  title: issue.title,
-  createdAt: new Date(issue.created_at),
-  comments: issue.comments,
-  avatarUrl: issue.user ? issue.user.avatar_url : 'https://i.stack.imgur.com/frlIf.png',
-  body: issue.body ?? '',
-});
 
 const Layout = styled.section`
   display: flex;
