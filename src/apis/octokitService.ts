@@ -1,5 +1,5 @@
-import { IssueList, IssueDetail, octokitInstance } from '@/apis';
-import { ENDPOINT, ENDPOINT_ISSUE_DETAIL, PER_PAGE, REPO, OWNER } from '@/constants';
+import { IssueDetail, IssueList, octokitInstance } from '@/apis';
+import { ENDPOINT, ENDPOINT_ISSUE_DETAIL, OWNER, PER_PAGE, REPO } from '@/constants';
 
 export const getIssues = async (page: number): Promise<IssueList> => {
   const response = await octokitInstance.request(ENDPOINT, {
