@@ -6,7 +6,6 @@ import { parseIssue } from '@/utils';
 
 const TERM_OF_AD = 4;
 
-// TODO 이슈 페이지에서 IssueList 리턴
 const IssueList = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [issues, setIssues] = useState<IssueListType>([]);
