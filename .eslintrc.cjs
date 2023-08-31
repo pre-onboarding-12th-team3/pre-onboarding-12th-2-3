@@ -16,6 +16,7 @@ module.exports = {
     'prettier/prettier': 'error',
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     '@typescript-eslint/no-unused-vars': ['warn'],
+    'import/no-unresolved': 'off',
     'import/order': [
       'error',
       {
@@ -35,5 +36,12 @@ module.exports = {
         'newlines-between': 'always',
       },
     ],
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        paths: ['src'],
+      },
+    },
   },
 };
