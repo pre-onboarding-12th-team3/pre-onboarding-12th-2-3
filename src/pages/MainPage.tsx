@@ -1,5 +1,11 @@
+import { IssueList } from '@/components/domain/issue';
+
 const MainPage = () => {
-  return <div>MainPage</div>;
+  return (
+    <>
+      <IssueList />
+    </>
+  );
 };
 
 export default MainPage;
