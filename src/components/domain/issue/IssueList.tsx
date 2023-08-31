@@ -10,19 +10,20 @@ const IssueList = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [issues, setIssues] = useState<IssueListType>([]);
 
+  const fetchIssues = async (/* pageNumber */) => {
+    setIsFetching(true);
+    try {
+      const issueDatas = await getIssues(1); // TODO page 바꾸기
+      setIssues(issueDatas);
+    } catch {
+      alert('데이터를 불러오는데 실패했습니다.');
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchIssues = async () => {
-      setIsFetching(true);
-      try {
-        const issueDatas = await getIssues(1); // TODO page 바꾸기
-        setIssues(issueDatas);
-      } catch {
-        alert('데이터를 불러오는데 실패했습니다.');
-      } finally {
-        setIsFetching(false);
-      }
-    };
-    fetchIssues();
+    fetchIssues(/* pageNumber */);
   }, []);
 
   return (
