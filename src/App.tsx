@@ -2,12 +2,12 @@ import '@/App.css';
 import { Outlet } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import { Heading } from './components/common';
+import { Header } from './components/common';
 
 function App() {
   return (
     <>
-      <Heading>React/Facebook</Heading>
+      <Header />
       <Main>
         <Outlet />
       </Main>
