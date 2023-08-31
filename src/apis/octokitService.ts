@@ -15,9 +15,9 @@ export const getIssues = async (page: number): Promise<IssueList> => {
 };
 
 export const getIssueDetail = async (issueNumber: string): Promise<IssueDetail> => {
-  const issue_number = parseInt(issueNumber);
+  const issue_number = Number(issueNumber);
 
-  if (typeof issue_number === 'string') {
+  if (isNaN(issue_number)) {
     throw new Error('잘못된 접근입니다.');
   }
 
