@@ -14,15 +14,17 @@ export const getIssues = async (page: number): Promise<IssueList> => {
   return response.data;
 };
 
-export const getIssueDetail = async (issueNumber: number | string): Promise<IssueDetail> => {
-  if (typeof issueNumber === 'string') {
+export const getIssueDetail = async (issueNumber: string): Promise<IssueDetail> => {
+  const issue_number = parseInt(issueNumber);
+
+  if (typeof issue_number === 'string') {
     throw new Error('잘못된 접근입니다.');
   }
 
   const response = await octokitInstance.request(ENDPOINT_ISSUE_DETAIL, {
     owner: OWNER,
     repo: REPO,
-    issue_number: issueNumber,
+    issue_number,
   });
 
   if (response.status !== 200) {
