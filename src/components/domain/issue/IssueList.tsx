@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from 'react';
 
 import { IssueList as IssueListType, getIssues } from '@/apis';
 import { IssueListItem } from '@/components/domain/issue';
-import { Issue } from '@/types/issue';
+import { parseIssue } from '@/utils';
 
 const TERM_OF_AD = 4;
 
@@ -25,18 +25,6 @@ const IssueList = () => {
     };
     fetchIssues();
   }, []);
-
-  const parseIssue = (issue: IssueListType[number]): Issue => {
-    return {
-      issueNumber: issue.number,
-      title: issue.title,
-      userName: issue.user?.login ?? 'unknown user',
-      createdAt: issue.created_at,
-      comments: issue.comments,
-      avatarUrl: issue.user?.avatar_url ?? '',
-      body: issue.body,
-    };
-  };
 
   return (
     <>
