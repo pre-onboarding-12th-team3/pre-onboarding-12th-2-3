@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 
 import { IssueList as IssueListType, getIssues } from '@/apis';
+import { Advertisement } from '@/components/common';
 import { IssueListItem } from '@/components/domain/issue';
 import { parseIssue } from '@/utils';
 
@@ -35,7 +36,7 @@ const IssueList = () => {
           <Fragment key={issue.number}>
             <IssueListItem issue={parseIssue(issue)} />
             {/* TODO 광고 컴포넌트 넣기 */}
-            {(index + 1) % TERM_OF_AD === 0 && '광고'}
+            {(index + 1) % TERM_OF_AD === 0 && <Advertisement />}
           </Fragment>
         ))}
       </ul>
