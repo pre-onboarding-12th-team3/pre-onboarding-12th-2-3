@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "postinstall": "husky install",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --project . --noEmit"
   },
   "dependencies": {
     "octokit": "^3.1.0",
