@@ -25,7 +25,7 @@
 
 ## 🚀 배포 링크
 
-배포 링크: 
+배포 링크: [wanted-pre-onboarding-12th-2week.s3-website.ap-northeast-2.amazonaws.com](http://wanted-pre-onboarding-12th-2week.s3-website.ap-northeast-2.amazonaws.com)
 
 <br/>
 
