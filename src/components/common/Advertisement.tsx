@@ -24,10 +24,13 @@ const Advertisement = () => {
 const StyledContainer = styled.div`
   width: 100%;
   padding: 20px 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const StyledLink = styled(Link)``;
 const StyledImage = styled.img`
-  width: 100%;
+  max-height: 240px;
 `;
 const Skeleton = styled.img`
   width: 100%;
