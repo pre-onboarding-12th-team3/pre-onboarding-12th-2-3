@@ -11,31 +11,35 @@ export const getIssues = async (page: number): Promise<IssueListResponse> => {
     page,
   });
 
+  let isLastPage = true;
   const linkHeader = response.headers.link;
   if (linkHeader) {
-    const links = linkHeader.split(',');
-    const lastPageLink = links.find((link) => link.includes('rel="last"'));
-    if (lastPageLink) {
-      const match = lastPageLink.match(/<([^>]+)>/);
-      if (match) {
-        const lastPageUrl = match[1];
-        const params = new URLSearchParams(lastPageUrl.split('?')[1]);
-        const lastPage = parseInt(params.get('page') || '1', 10);
-
-        const isLastPage = page === lastPage;
-
-        return {
-          data: response.data,
-          isLastPage: isLastPage,
-        };
-      }
+    const lastPageUrl = extractLastPageUrl(linkHeader);
+    if (lastPageUrl) {
+      const lastPage = extractLastPageNumber(lastPageUrl);
+      isLastPage = page === lastPage;
     }
   }
 
   return {
     data: response.data,
-    isLastPage: true,
+    isLastPage,
   };
+};
+
+const extractLastPageUrl = (linkHeader: string): string | null => {
+  const links = linkHeader.split(',');
+  const lastPageLink = links.find((link) => link.includes('rel="last"'));
+  if (lastPageLink) {
+    const match = lastPageLink.match(/<([^>]+)>/);
+    return match ? match[1] : null;
+  }
+  return null;
+};
+
+const extractLastPageNumber = (lastPageUrl: string): number => {
+  const params = new URLSearchParams(lastPageUrl.split('?')[1]);
+  return parseInt(params.get('page') || '1', 10);
 };
 
 export const getIssueDetail = async (issueNumber: string): Promise<IssueDetail> => {
