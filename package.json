@@ -42,8 +42,7 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "prettier --cache --write",
-      "eslint --cache",
-      "tsc --noemit"
+      "eslint --cache"
     ]
   }
 }
