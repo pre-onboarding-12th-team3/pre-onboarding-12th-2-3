@@ -1,10 +1,9 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 import { IssueList as IssueListType, getIssues } from '@/apis';
 import { Advertisement, Loading } from '@/components/common';
-import { IssueListItem } from '@/components/domain/issue';
-import { PER_PAGE } from '@/constants';
-import useIntersectionObserver from '@/hooks/useIntersectionObserver';
+import { EmptyList, IssueListItem } from '@/components/domain/issue';
+import { useIntersectionObserver } from '@/hooks';
 import { parseIssue } from '@/utils';
 
 const TERM_OF_AD = 4;
@@ -12,16 +11,16 @@ const TERM_OF_AD = 4;
 const IssueList = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasNextPage, setHasNextPage] = useState(false);
   const [issues, setIssues] = useState<IssueListType>([]);
+  const [ref, inView] = useIntersectionObserver({ threshold: 0.3 });
 
   const fetchIssues = async (pageNumber: number) => {
     setIsFetching(true);
     try {
-      const issueDatas = await getIssues(pageNumber);
-      issueDatas.data.length < PER_PAGE && setHasMore(false);
-      setIssues((prevIssues) => [...prevIssues, ...issueDatas.data]);
-      setPageNumber((prev) => prev + 1);
+      const { data, isLastPage } = await getIssues(pageNumber);
+      setHasNextPage(!isLastPage);
+      setIssues((prevIssues) => [...prevIssues, ...data]);
     } catch {
       alert('데이터를 불러오는데 실패했습니다.');
     } finally {
@@ -29,20 +28,30 @@ const IssueList = () => {
     }
   };
 
-  const observedRef = useIntersectionObserver(fetchIssues, pageNumber);
+  useEffect(() => {
+    fetchIssues(pageNumber);
+  }, [pageNumber]);
+
+  useEffect(() => {
+    if (inView && hasNextPage) setPageNumber((prev) => prev + 1);
+  }, [inView, hasNextPage]);
 
   return (
     <>
       {isFetching && <Loading />}
       <ul>
-        {issues.map((issue, index) => (
-          <Fragment key={issue.number}>
-            <IssueListItem issue={parseIssue(issue)} />
-            {(index + 1) % TERM_OF_AD === 0 && <Advertisement />}
-          </Fragment>
-        ))}
+        {issues.length ? (
+          issues.map((issue, index) => (
+            <Fragment key={issue.number}>
+              <IssueListItem issue={parseIssue(issue)} />
+              {(index + 1) % TERM_OF_AD === 0 && <Advertisement />}
+            </Fragment>
+          ))
+        ) : (
+          <EmptyList />
+        )}
       </ul>
-      {hasMore && <div ref={observedRef}></div>}
+      {!isFetching && <div ref={ref} style={{ height: '10px' }}></div>}
     </>
   );
 };
