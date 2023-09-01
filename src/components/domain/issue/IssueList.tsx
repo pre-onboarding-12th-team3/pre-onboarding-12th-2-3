@@ -16,7 +16,6 @@ const IssueList = () => {
   const [issues, setIssues] = useState<IssueListType>([]);
 
   const fetchIssues = async (pageNumber: number) => {
-    console.log(pageNumber);
     setIsFetching(true);
     try {
       const issueDatas = await getIssues(pageNumber);
