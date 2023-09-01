@@ -26,7 +26,6 @@
 
 배포 링크: [wanted-pre-onboarding-12th-2week.s3-website.ap-northeast-2.amazonaws.com](http://wanted-pre-onboarding-12th-2week.s3-website.ap-northeast-2.amazonaws.com)
 
-
 <br/>
 
 ## 🎬 프로젝트 로컬 실행 방법
@@ -229,13 +228,44 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:import/typescript',
+    'plugin:import/recommended',
+    'plugin:prettier/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'prettier'],
   rules: {
+    'prettier/prettier': 'error',
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     '@typescript-eslint/no-unused-vars': ['warn'],
+    'import/no-unresolved': 'off',
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', 'internal'],
+        pathGroups: [
+          {
+            pattern: '{react}',
+            group: 'builtin',
+            position: 'after',
+          },
+        ],
+        pathGroupsExcludedImportTypes: ['react'],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+        'newlines-between': 'always',
+      },
+    ],
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        paths: ['src'],
+      },
+    },
   },
 };
 ```
@@ -244,7 +274,7 @@ module.exports = {
 
 ```json
 {
-  "printWidth": 120,
+  "printWidth": 100,
   "tabWidth": 2,
   "useTabs": false,
   "semi": true,
@@ -252,16 +282,6 @@ module.exports = {
   "trailingComma": "all",
   "bracketSpacing": true,
   "arrowParens": "always",
-  "endOfLine": "auto",
-  "editor.wordWrap": "on"
+  "endOfLine": "auto"
 }
-```
-
-### Setting.json
-
-```json
-"editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "source.organizeImports": true
-},
 ```
