@@ -1,7 +1,7 @@
-import { IssueDetail, IssueList, octokitInstance } from '@/apis';
+import { IssueDetail, IssueListResponse, octokitInstance } from '@/apis';
 import { ENDPOINT, ENDPOINT_ISSUE_DETAIL, OWNER, PER_PAGE, REPO } from '@/constants';
 
-export const getIssues = async (page: number): Promise<IssueList> => {
+export const getIssues = async (page: number): Promise<IssueListResponse> => {
   const response = await octokitInstance.request(ENDPOINT, {
     owner: OWNER,
     repo: REPO,
@@ -11,7 +11,31 @@ export const getIssues = async (page: number): Promise<IssueList> => {
     page,
   });
 
-  return response.data;
+  const linkHeader = response.headers.link;
+  if (linkHeader) {
+    const links = linkHeader.split(',');
+    const lastPageLink = links.find((link) => link.includes('rel="last"'));
+    if (lastPageLink) {
+      const match = lastPageLink.match(/<([^>]+)>/);
+      if (match) {
+        const lastPageUrl = match[1];
+        const params = new URLSearchParams(lastPageUrl.split('?')[1]);
+        const lastPage = parseInt(params.get('page') || '1', 10);
+
+        const isLastPage = page === lastPage;
+
+        return {
+          data: response.data,
+          isLastPage: isLastPage,
+        };
+      }
+    }
+  }
+
+  return {
+    data: response.data,
+    isLastPage: true,
+  };
 };
 
 export const getIssueDetail = async (issueNumber: string): Promise<IssueDetail> => {

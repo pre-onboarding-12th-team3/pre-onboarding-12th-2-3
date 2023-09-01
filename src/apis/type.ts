@@ -4,3 +4,8 @@ import { ENDPOINT, ENDPOINT_ISSUE_DETAIL } from '@/constants';
 
 export type IssueList = Endpoints[typeof ENDPOINT]['response']['data'];
 export type IssueDetail = Endpoints[typeof ENDPOINT_ISSUE_DETAIL]['response']['data'];
+
+export interface IssueListResponse {
+  data: IssueList;
+  isLastPage: boolean;
+}
