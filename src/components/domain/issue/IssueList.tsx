@@ -3,6 +3,7 @@ import { Fragment, useState } from 'react';
 import { IssueList as IssueListType, getIssues } from '@/apis';
 import { Advertisement, Loading } from '@/components/common';
 import { IssueListItem } from '@/components/domain/issue';
+import { PER_PAGE } from '@/constants';
 import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { parseIssue } from '@/utils';
 
@@ -10,13 +11,18 @@ const TERM_OF_AD = 4;
 
 const IssueList = () => {
   const [isFetching, setIsFetching] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [issues, setIssues] = useState<IssueListType>([]);
 
-  const fetchIssues = async (/* pageNumber: number */) => {
+  const fetchIssues = async (pageNumber: number) => {
+    console.log(pageNumber);
     setIsFetching(true);
     try {
-      const issueDatas = await getIssues(1); // TODO page 바꾸기
-      setIssues(issueDatas);
+      const issueDatas = await getIssues(pageNumber);
+      issueDatas.length < PER_PAGE && setHasMore(false);
+      setIssues((prevIssues) => [...prevIssues, ...issueDatas]);
+      setPageNumber((prev) => prev + 1);
     } catch {
       alert('데이터를 불러오는데 실패했습니다.');
     } finally {
@@ -24,7 +30,7 @@ const IssueList = () => {
     }
   };
 
-  const observedRef = useIntersectionObserver(fetchIssues /*, pageNumber*/);
+  const observedRef = useIntersectionObserver(fetchIssues, pageNumber);
 
   return (
     <>
@@ -37,7 +43,7 @@ const IssueList = () => {
           </Fragment>
         ))}
       </ul>
-      <div ref={observedRef}></div>
+      {hasMore && <div ref={observedRef}></div>}
     </>
   );
 };

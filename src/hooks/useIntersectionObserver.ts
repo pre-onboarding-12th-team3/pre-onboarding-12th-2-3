@@ -1,14 +1,12 @@
 import { useEffect, useRef } from 'react';
 
-const useIntersectionObserver = (
-  callback: (/* pageNumber: number */) => void /* pageNumber: number */,
-) => {
+const useIntersectionObserver = (callback: (pageNumber: number) => void, pageNumber: number) => {
   const ref = useRef(null);
 
   const onIntersection = (entries: IntersectionObserverEntry[]) => {
     const entry = entries[0];
     if (entry.isIntersecting) {
-      callback(/* pageNumber */);
+      callback(pageNumber);
     }
   };
 
