@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { default as styled } from 'styled-components';
 
 import { getIssueDetail } from '@/apis';
-import { MarkdownViewer } from '@/components/common';
+import { Loading, MarkdownViewer } from '@/components/common';
 import { IssueInfo } from '@/components/domain/issue';
 import { Issue } from '@/types/issue';
 import { parseIssue } from '@/utils';
@@ -41,8 +41,7 @@ const DetailPage = () => {
           <MarkdownViewer content={issue.body ?? ''}></MarkdownViewer>
         </>
       ) : (
-        // 로딩 이미지 추가예정
-        <>로딩중</>
+        <Loading />
       )}
     </>
   );
