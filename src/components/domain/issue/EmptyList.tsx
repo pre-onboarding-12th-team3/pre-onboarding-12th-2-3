@@ -1,5 +1,5 @@
 const EmptyList = () => {
-  return <div>데이터가 없습니다.</div>;
+  return <li>데이터가 없습니다.</li>;
 };
 
 export default EmptyList;
