@@ -21,7 +21,7 @@ const useIntersectionObserver = (callback: (pageNumber: number) => void, pageNum
     return () => {
       current && observer.unobserve(current);
     };
-  }, [onIntersection]);
+  }, [pageNumber]);
 
   return ref;
 };
