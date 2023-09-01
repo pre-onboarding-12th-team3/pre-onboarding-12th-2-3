@@ -19,8 +19,8 @@ const IssueList = () => {
     setIsFetching(true);
     try {
       const issueDatas = await getIssues(pageNumber);
-      issueDatas.length < PER_PAGE && setHasMore(false);
-      setIssues((prevIssues) => [...prevIssues, ...issueDatas]);
+      issueDatas.data.length < PER_PAGE && setHasMore(false);
+      setIssues((prevIssues) => [...prevIssues, ...issueDatas.data]);
       setPageNumber((prev) => prev + 1);
     } catch {
       alert('데이터를 불러오는데 실패했습니다.');
