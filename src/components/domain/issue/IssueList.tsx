@@ -1,8 +1,9 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import { IssueList as IssueListType, getIssues } from '@/apis';
 import { Advertisement, Loading } from '@/components/common';
 import { IssueListItem } from '@/components/domain/issue';
+import useIntersectionObserver from '@/hooks/useIntersectionObserver';
 import { parseIssue } from '@/utils';
 
 const TERM_OF_AD = 4;
@@ -11,7 +12,7 @@ const IssueList = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [issues, setIssues] = useState<IssueListType>([]);
 
-  const fetchIssues = async (/* pageNumber */) => {
+  const fetchIssues = async (/* pageNumber: number */) => {
     setIsFetching(true);
     try {
       const issueDatas = await getIssues(1); // TODO page 바꾸기
@@ -23,9 +24,7 @@ const IssueList = () => {
     }
   };
 
-  useEffect(() => {
-    fetchIssues(/* pageNumber */);
-  }, []);
+  const observedRef = useIntersectionObserver(fetchIssues /*, pageNumber*/);
 
   return (
     <>
@@ -38,6 +37,7 @@ const IssueList = () => {
           </Fragment>
         ))}
       </ul>
+      <div ref={observedRef}></div>
     </>
   );
 };
